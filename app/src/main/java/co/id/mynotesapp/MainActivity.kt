@@ -1,11 +1,15 @@
 package co.id.mynotesapp
 
 import android.content.Intent
+import android.database.ContentObserver
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.mynotesapp.databinding.ActivityMainBinding
+import co.id.mynotesapp.db.DatabaseContract.NoteColumns.Companion.CONTENT_URI
 import co.id.mynotesapp.db.NoteHelper
 import co.id.mynotesapp.entity.Note
 import co.id.mynotesapp.helper.MappingHelper
@@ -20,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: NoteAdapter
-    private lateinit var noteHelper: NoteHelper
 
     companion object {
         private const val EXTRA_STATE = "EXTRA_STATE"
@@ -43,8 +46,17 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, NoteAddUpdateActivity.REQUEST_ADD)
         }
 
-        noteHelper = NoteHelper.getInstance(applicationContext)
-        noteHelper.open()
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+
+        val myObserver = object : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean) {
+                loadNotesAsync()
+            }
+        }
+
+        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
 
         if (savedInstanceState == null) {
             //ambil data
@@ -73,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             binding.progressbar.visibility = View.VISIBLE
             val deferredNotes = async(Dispatchers.IO) {
-                val cursor = noteHelper.queryAll()
+                val cursor = contentResolver?.query(CONTENT_URI, null, null, null, null)
                 MappingHelper.mapCursorToArrayList(cursor)
             }
             binding.progressbar.visibility = View.INVISIBLE
@@ -127,12 +139,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        noteHelper.close()
     }
 
 
