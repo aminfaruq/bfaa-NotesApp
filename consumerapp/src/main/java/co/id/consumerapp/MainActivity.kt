@@ -1,4 +1,4 @@
-package co.id.mynotesapp
+package co.id.consumerapp
 
 import android.content.Intent
 import android.database.ContentObserver
@@ -8,10 +8,10 @@ import android.os.HandlerThread
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import co.id.mynotesapp.databinding.ActivityMainBinding
-import co.id.mynotesapp.db.DatabaseContract.NoteColumns.Companion.CONTENT_URI
-import co.id.mynotesapp.entity.Note
-import co.id.mynotesapp.helper.MappingHelper
+import co.id.consumerapp.databinding.ActivityMainBinding
+import co.id.consumerapp.db.DatabaseContract.NoteColumns.Companion.CONTENT_URI
+import co.id.consumerapp.entity.Note
+import co.id.consumerapp.helper.MappingHelper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Notes"
+        supportActionBar?.title = "Consumer Notes"
 
         binding.rvNotes.layoutManager = LinearLayoutManager(this)
         binding.rvNotes.setHasFixedSize(true)

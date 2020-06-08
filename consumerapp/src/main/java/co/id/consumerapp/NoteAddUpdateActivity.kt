@@ -1,4 +1,4 @@
-package co.id.mynotesapp
+package co.id.consumerapp
 
 import android.content.ContentValues
 import android.content.Intent
@@ -10,11 +10,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import co.id.mynotesapp.db.DatabaseContract
-import co.id.mynotesapp.db.DatabaseContract.NoteColumns.Companion.CONTENT_URI
-import co.id.mynotesapp.db.DatabaseContract.NoteColumns.Companion.DATE
-import co.id.mynotesapp.entity.Note
-import co.id.mynotesapp.helper.MappingHelper
+import co.id.consumerapp.db.DatabaseContract
+import co.id.consumerapp.db.DatabaseContract.NoteColumns.Companion.CONTENT_URI
+import co.id.consumerapp.db.DatabaseContract.NoteColumns.Companion.DATE
+import co.id.consumerapp.entity.Note
+import co.id.consumerapp.helper.MappingHelper
 import kotlinx.android.synthetic.main.activity_note_add_update.*
 import java.text.SimpleDateFormat
 import java.util.*
